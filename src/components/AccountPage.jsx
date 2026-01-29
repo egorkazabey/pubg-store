@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import cardImg from "../assets/card-img.png";
-
+import qrtg from '../assets/tg-qr.jpg'
 const AccountPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -84,7 +84,7 @@ const AccountPage = () => {
         <div className="space-y-4">
           <h1 className="text-2xl font-semibold leading-snug">{account.title}</h1>
 
-          <div className="text-3xl text-yellow-400 font-bold">₽ {account.price}</div>
+          <div className="text-3xl text-white font-bold">₽ {account.price}</div>
 
           {/* Кнопка Купить */}
           <button
@@ -146,8 +146,8 @@ const AccountPage = () => {
 
             <div className="flex justify-center">
               <img
-                className="w-48 h-48"
-                src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://t.me/YourTelegramBot"
+                className="w-48 h-48 rounded-xl"
+                src={qrtg}
                 alt="QR код"
               />
             </div>

@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import FiltersBar from "../components/FiltersBar";
-import AccountList from "../components/AccountList";
 import TagsFilter from "../components/TagsFilter";
+import AccountList from "../components/AccountList";
 import background from "../assets/background1.jpg";
 
 export default function Home() {
   const [accounts, setAccounts] = useState([]);
+
+  // состояния для инпутов фильтров
   const [search, setSearch] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -16,10 +18,22 @@ export default function Home() {
   const [sort, setSort] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
 
+  // активные фильтры, по которым реально фильтруем
+  const [activeFilters, setActiveFilters] = useState({
+    search: "",
+    minPrice: "",
+    maxPrice: "",
+    rarity: "",
+    weaponType: "",
+    sort: "",
+    selectedTags: [],
+  });
+
   // Пагинация
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
 
+  // Загрузка данных
   useEffect(() => {
     const load = async () => {
       const snap = await getDocs(collection(db, "accounts"));
@@ -28,50 +42,23 @@ export default function Home() {
     load();
   }, []);
 
-  // Сброс страницы при изменении фильтров
+  // Сброс страницы при изменении активных фильтров
   useEffect(() => {
     setCurrentPage(1);
-  }, [search, minPrice, maxPrice, rarity, weaponType, selectedTags]);
+  }, [activeFilters]);
 
-  const filteredAccounts = useMemo(() => {
-    let data = [...accounts];
-
-    if (search)
-      data = data.filter((a) =>
-        a.title.toLowerCase().includes(search.toLowerCase()),
-      );
-
-    if (rarity) data = data.filter((a) => a.rarity === rarity);
-    if (weaponType) data = data.filter((a) => a.weaponType === weaponType);
-    if (minPrice) data = data.filter((a) => a.price >= Number(minPrice));
-    if (maxPrice) data = data.filter((a) => a.price <= Number(maxPrice));
-
-    if (selectedTags.length)
-      data = data.filter((a) =>
-        selectedTags.every((tag) => a.tags?.includes(tag)),
-      );
-
-    if (sort === "priceAsc") data.sort((a, b) => a.price - b.price);
-    if (sort === "priceDesc") data.sort((a, b) => b.price - a.price);
-
-    return data;
-  }, [
-    accounts,
-    search,
-    minPrice,
-    maxPrice,
-    rarity,
-    weaponType,
-    sort,
-    selectedTags,
-  ]);
-
-  const totalPages = Math.ceil(filteredAccounts.length / itemsPerPage);
-
-  const currentItems = filteredAccounts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
-  );
+  // Применение фильтров по кнопке
+  const handleApplyFilters = () => {
+    setActiveFilters({
+      search,
+      minPrice,
+      maxPrice,
+      rarity,
+      weaponType,
+      sort,
+      selectedTags,
+    });
+  };
 
   const resetFilters = () => {
     setSearch("");
@@ -81,7 +68,42 @@ export default function Home() {
     setWeaponType("");
     setSort("");
     setSelectedTags([]);
+    setActiveFilters({
+      search: "",
+      minPrice: "",
+      maxPrice: "",
+      rarity: "",
+      weaponType: "",
+      sort: "",
+      selectedTags: [],
+    });
   };
+
+  // Фильтрация данных
+  const filteredAccounts = useMemo(() => {
+    let data = [...accounts];
+    const f = activeFilters;
+
+    if (f.search) data = data.filter((a) => a.title.toLowerCase().includes(f.search.toLowerCase()));
+    if (f.rarity) data = data.filter((a) => a.rarity === f.rarity);
+    if (f.weaponType) data = data.filter((a) => a.weaponType === f.weaponType);
+    if (f.minPrice) data = data.filter((a) => a.price >= Number(f.minPrice));
+    if (f.maxPrice) data = data.filter((a) => a.price <= Number(f.maxPrice));
+    if (f.selectedTags.length)
+      data = data.filter((a) => f.selectedTags.every((tag) => a.tags?.includes(tag)));
+
+    if (f.sort === "priceAsc") data.sort((a, b) => a.price - b.price);
+    if (f.sort === "priceDesc") data.sort((a, b) => b.price - a.price);
+
+    return data;
+  }, [accounts, activeFilters]);
+
+  // Пагинация
+  const totalPages = Math.ceil(filteredAccounts.length / itemsPerPage);
+  const currentItems = filteredAccounts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const goToPage = (page) => {
     if (page < 1) page = 1;
@@ -105,7 +127,7 @@ export default function Home() {
           }`}
         >
           {i}
-        </button>,
+        </button>
       );
     }
 
@@ -147,7 +169,7 @@ export default function Home() {
         <div className="relative">
           <img
             src={background}
-            className="w-full  object-cover opacity-80"
+            className="w-full object-cover opacity-80"
             alt=""
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f16] to-transparent" />
@@ -158,6 +180,7 @@ export default function Home() {
             </p>
           </div>
         </div>
+
         {/* Уведомление */}
         <div className="bg-[#141a25] border border-gray-700 rounded-2xl p-4 my-6 text-sm text-gray-300 shadow-md">
           ⚠ Все аккаунты проверяются вручную. Возврат средств при проблемах.
@@ -187,6 +210,7 @@ export default function Home() {
               sort,
               setSort,
               onReset: resetFilters,
+              onSearch: handleApplyFilters,
             }}
           />
         </div>

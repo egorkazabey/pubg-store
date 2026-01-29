@@ -12,11 +12,11 @@ export default function FiltersBar({
   sort,
   setSort,
   onReset,
+  onSearch,
 }) {
   return (
     <div className="bg-[#141a25] border border-gray-700 rounded-xl p-5 mb-6">
       <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
-
         <input
           className="bg-[#141a25] border border-gray-600 text-white rounded-lg px-3 py-2 placeholder-gray-400"
           placeholder="Поиск аккаунта"
@@ -51,7 +51,10 @@ export default function FiltersBar({
           <option value="new">Новые</option>
         </select>
 
-        <button className="bg-blue-600 hover:bg-blue-700 transition p-3 text-white rounded-lg">
+        <button
+          onClick={onSearch}
+          className="bg-blue-600 hover:bg-blue-700 transition p-3 text-white rounded-lg"
+        >
           Поиск
         </button>
       </div>

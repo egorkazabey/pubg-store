@@ -19,7 +19,6 @@ export default function TagsFilter({ selectedTags = [], setSelectedTags }) {
         <div key={group.label}>
           <h3 className="text-white font-semibold mb-3">{group.label}</h3>
 
-          {/* Простые теги */}
           {group.list && (
             <div className="flex flex-wrap gap-2 mb-4">
               {group.list.map((item) => (
@@ -34,7 +33,6 @@ export default function TagsFilter({ selectedTags = [], setSelectedTags }) {
             </div>
           )}
 
-          {/* Оружие по типам */}
           {group.weapons &&
             Object.entries(group.weapons).map(([type, items]) => (
               <div key={type} className="mb-4">
@@ -55,7 +53,6 @@ export default function TagsFilter({ selectedTags = [], setSelectedTags }) {
         </div>
       ))}
 
-      {/* Кнопка показать все */}
       {groups.length > 1 && (
         <button
           onClick={() => setShowAll((prev) => !prev)}

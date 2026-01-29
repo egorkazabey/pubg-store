@@ -50,7 +50,7 @@ const AccountList = ({ accounts }) => {
               <div className="flex-1" />
 
               {/* Цена */}
-              <p className="text-yellow-400 font-bold text-xl">
+              <p className="text-white font-bold text-xl">
                 {acc.price} ₽
               </p>
             </div>
