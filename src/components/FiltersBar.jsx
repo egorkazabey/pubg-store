@@ -11,82 +11,63 @@ export default function FiltersBar({
   setWeaponType,
   sort,
   setSort,
-  onReset
+  onReset,
 }) {
   return (
-    <div className="bg-white rounded-xl p-5 shadow mb-6">
+    <div className="bg-[#141a25] border border-gray-700 rounded-xl p-5 mb-6">
       <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
 
         <input
-          className="border rounded-lg px-3 py-2"
-          placeholder="Поиск"
+          className="bg-[#141a25] border border-gray-600 text-white rounded-lg px-3 py-2 placeholder-gray-400"
+          placeholder="Поиск аккаунта"
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
         />
-
-        <select
-          className="border rounded-lg px-3 py-2"
-          value={rarity}
-          onChange={e => setRarity(e.target.value)}
-        >
-          <option value="">Все типы</option>
-          <option value="progressive">Progressive</option>
-          <option value="chroma">Chroma</option>
-          <option value="gloves">Перчатки</option>
-          <option value="hair">Причёски</option>
-          <option value="car">Машины</option>
-          <option value="smoke">Дым</option>
-        </select>
-
-        <select
-          className="border rounded-lg px-3 py-2"
-          value={weaponType}
-          onChange={e => setWeaponType(e.target.value)}
-        >
-          <option value="">Все категории</option>
-          <option value="AR">AR</option>
-          <option value="DMR">DMR</option>
-          <option value="SR">SR</option>
-          <option value="SMG">SMG</option>
-          <option value="LMG">LMG</option>
-          <option value="SHOTGUN">Shotgun</option>
-          <option value="Melee">Melee</option>
-        </select>
 
         <input
           type="number"
           placeholder="Цена от"
-          className="border rounded-lg px-3 py-2"
+          className="bg-[#141a25] border border-gray-600 text-white rounded-lg px-3 py-2 placeholder-gray-400"
           value={minPrice}
-          onChange={e => setMinPrice(e.target.value)}
+          onChange={(e) => setMinPrice(e.target.value)}
         />
 
         <input
           type="number"
           placeholder="Цена до"
-          className="border rounded-lg px-3 py-2"
+          className="bg-[#141a25] border border-gray-600 text-white rounded-lg px-3 py-2 placeholder-gray-400"
           value={maxPrice}
-          onChange={e => setMaxPrice(e.target.value)}
+          onChange={(e) => setMaxPrice(e.target.value)}
         />
 
         <select
-          className="border rounded-lg px-3 py-2"
+          className="bg-[#141a25] border border-gray-600 text-white rounded-lg px-3 py-2"
           value={sort}
-          onChange={e => setSort(e.target.value)}
+          onChange={(e) => setSort(e.target.value)}
         >
           <option value="">Без сортировки</option>
           <option value="priceAsc">Цена ↑</option>
           <option value="priceDesc">Цена ↓</option>
           <option value="new">Новые</option>
         </select>
+
+        <button className="bg-blue-600 hover:bg-blue-700 transition p-3 text-white rounded-lg">
+          Поиск
+        </button>
       </div>
 
-      <button
-        onClick={onReset}
-        className="mt-4 text-sm text-blue-600"
-      >
-        Сбросить фильтры
-      </button>
+      <div className="flex justify-between items-center mt-4">
+        <span className="text-sm text-gray-400">
+          Используйте фильтры для быстрого поиска
+        </span>
+
+        <button
+          onClick={onReset}
+          className="text-sm text-red-400 hover:text-red-300 transition"
+        >
+          Сбросить фильтры
+        </button>
+      </div>
     </div>
   );
 }

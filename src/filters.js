@@ -66,7 +66,6 @@ export const FILTER_GROUPS = {
         "M416 No Signal (Purple Charcoal)",
         "M416 Zhu Bajie (Teal Orange)",
         "M416 Zhu Bajie (Magenta Peach)"
-        // дальше по списку
       ]
     }
   },
@@ -150,5 +149,13 @@ export const FILTER_GROUPS = {
       "Purple",
       "Orange"
     ]
+  },
+  survival: {
+    label: "Survival Level",
+    list: ["1 TIER", "2 TIER", "3 TIER", "4 TIER", "5 TIER"]
+  },
+  pubgPlus: {
+    label: "PUBG PLUS",
+    list: ["YES", "NO"]
   }
 };
