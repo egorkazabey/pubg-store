@@ -96,7 +96,7 @@ export default function Admin() {
           onChange={e => setPrice(e.target.value)} 
         />
         <textarea 
-          className="bg-[#0b0f16] p-3 rounded-lg min-h-[100px] w-full border border-gray-700 focus:border-blue-500 outline-none transition" 
+          className="bg-[#0b0f16] p-3 rounded-lg min-h-25 w-full border border-gray-700 focus:border-blue-500 outline-none transition" 
           placeholder="Ссылки на картинки (каждая с новой строки)" 
           value={imagesText} 
           onChange={e => setImagesText(e.target.value)} 
@@ -108,7 +108,7 @@ export default function Admin() {
           onChange={e => setExtraImage(e.target.value)}
         />
         <textarea
-          className="bg-[#0b0f16] p-3 rounded-lg min-h-[80px] w-full border border-gray-700 focus:border-blue-500 outline-none transition"
+          className="bg-[#0b0f16] p-3 rounded-lg min-h-20 w-full border border-gray-700 focus:border-blue-500 outline-none transition"
           placeholder="Описание продукта"
           value={description}
           onChange={e => setDescription(e.target.value)}

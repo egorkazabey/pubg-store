@@ -1,5 +1,5 @@
 import "./App.css";
-import AccountPage from "./components/AccountPage";
+import AccountPage from "./pages/AccountPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";

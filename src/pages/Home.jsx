@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+import { useSearchParams } from "react-router-dom";
+
 import FiltersBar from "../components/FiltersBar";
 import TagsFilter from "../components/TagsFilter";
 import AccountList from "../components/AccountList";
@@ -8,32 +10,31 @@ import background from "../assets/background1.jpg";
 
 export default function Home() {
   const [accounts, setAccounts] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  // состояния для инпутов фильтров
-  const [search, setSearch] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [rarity, setRarity] = useState("");
-  const [weaponType, setWeaponType] = useState("");
-  const [sort, setSort] = useState("");
-  const [selectedTags, setSelectedTags] = useState([]);
+  // ===== состояния инпутов (берём из URL) =====
+  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
+  const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
+  const [sort, setSort] = useState(searchParams.get("sort") || "");
+  const [selectedTags, setSelectedTags] = useState(
+    searchParams.get("tags")?.split(",").filter(Boolean) || [],
+  );
 
-  // активные фильтры, по которым реально фильтруем
+  // ===== активные фильтры =====
   const [activeFilters, setActiveFilters] = useState({
-    search: "",
-    minPrice: "",
-    maxPrice: "",
-    rarity: "",
-    weaponType: "",
-    sort: "",
-    selectedTags: [],
+    search,
+    minPrice,
+    maxPrice,
+    sort,
+    selectedTags,
   });
 
-  // Пагинация
+  // ===== пагинация =====
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
 
-  // Загрузка данных
+  // ===== загрузка данных =====
   useEffect(() => {
     const load = async () => {
       const snap = await getDocs(collection(db, "accounts"));
@@ -42,55 +43,79 @@ export default function Home() {
     load();
   }, []);
 
-  // Сброс страницы при изменении активных фильтров
+  // ===== применяем фильтры из URL при первом входе =====
   useEffect(() => {
-    setCurrentPage(1);
-  }, [activeFilters]);
-
-  // Применение фильтров по кнопке
-  const handleApplyFilters = () => {
     setActiveFilters({
       search,
       minPrice,
       maxPrice,
-      rarity,
-      weaponType,
+      sort,
+      selectedTags,
+    });
+  }, []); // eslint-disable-line
+
+  // ===== сброс страницы при изменении фильтров =====
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilters]);
+
+  // ===== кнопка "Поиск" =====
+  const handleApplyFilters = () => {
+    const params = {};
+
+    if (search) params.search = search;
+    if (minPrice) params.minPrice = minPrice;
+    if (maxPrice) params.maxPrice = maxPrice;
+    if (sort) params.sort = sort;
+    if (selectedTags.length) params.tags = selectedTags.join(",");
+
+    setSearchParams(params);
+
+    setActiveFilters({
+      search,
+      minPrice,
+      maxPrice,
       sort,
       selectedTags,
     });
   };
 
+  // ===== сброс =====
   const resetFilters = () => {
     setSearch("");
     setMinPrice("");
     setMaxPrice("");
-    setRarity("");
-    setWeaponType("");
     setSort("");
     setSelectedTags([]);
+    setSearchParams({});
+
     setActiveFilters({
       search: "",
       minPrice: "",
       maxPrice: "",
-      rarity: "",
-      weaponType: "",
       sort: "",
       selectedTags: [],
     });
   };
 
-  // Фильтрация данных
+  // ===== фильтрация =====
   const filteredAccounts = useMemo(() => {
     let data = [...accounts];
     const f = activeFilters;
 
-    if (f.search) data = data.filter((a) => a.title.toLowerCase().includes(f.search.toLowerCase()));
-    if (f.rarity) data = data.filter((a) => a.rarity === f.rarity);
-    if (f.weaponType) data = data.filter((a) => a.weaponType === f.weaponType);
+    if (f.search)
+      data = data.filter((a) =>
+        a.title.toLowerCase().includes(f.search.toLowerCase()),
+      );
+
     if (f.minPrice) data = data.filter((a) => a.price >= Number(f.minPrice));
+
     if (f.maxPrice) data = data.filter((a) => a.price <= Number(f.maxPrice));
+
     if (f.selectedTags.length)
-      data = data.filter((a) => f.selectedTags.every((tag) => a.tags?.includes(tag)));
+      data = data.filter((a) =>
+        f.selectedTags.every((tag) => a.tags?.includes(tag)),
+      );
 
     if (f.sort === "priceAsc") data.sort((a, b) => a.price - b.price);
     if (f.sort === "priceDesc") data.sort((a, b) => b.price - a.price);
@@ -98,11 +123,11 @@ export default function Home() {
     return data;
   }, [accounts, activeFilters]);
 
-  // Пагинация
+  // ===== пагинация =====
   const totalPages = Math.ceil(filteredAccounts.length / itemsPerPage);
   const currentItems = filteredAccounts.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const goToPage = (page) => {
@@ -114,50 +139,23 @@ export default function Home() {
   const renderPagination = () => {
     if (totalPages <= 1) return null;
 
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(
-        <button
-          key={i}
-          onClick={() => goToPage(i)}
-          className={`px-3 py-1 rounded border ${
-            i === currentPage
-              ? "bg-blue-600 text-white border-blue-600"
-              : "bg-[#141a25] text-gray-300 border-gray-700 hover:bg-[#1e2636]"
-          }`}
-        >
-          {i}
-        </button>
-      );
-    }
-
     return (
       <div className="flex flex-wrap gap-2 justify-center mt-6">
-        <button
-          onClick={() => goToPage(currentPage - 5)}
-          className="px-3 py-1 rounded bg-[#141a25] text-gray-300 border border-gray-700 hover:bg-[#1e2636]"
-        >
-          {"<<"}
-        </button>
-        <button
-          onClick={() => goToPage(currentPage - 1)}
-          className="px-3 py-1 rounded bg-[#141a25] text-gray-300 border border-gray-700 hover:bg-[#1e2636]"
-        >
-          {"<"}
-        </button>
-        {pages}
-        <button
-          onClick={() => goToPage(currentPage + 1)}
-          className="px-3 py-1 rounded bg-[#141a25] text-gray-300 border border-gray-700 hover:bg-[#1e2636]"
-        >
-          {">"}
-        </button>
-        <button
-          onClick={() => goToPage(currentPage + 5)}
-          className="px-3 py-1 rounded bg-[#141a25] text-gray-300 border border-gray-700 hover:bg-[#1e2636]"
-        >
-          {">>"}
-        </button>
+        <button onClick={() => goToPage(currentPage - 1)}>{"<"}</button>
+        {[...Array(totalPages)].map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goToPage(i + 1)}
+            className={`px-3 py-1 rounded border ${
+              currentPage === i + 1
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-[#141a25] text-gray-300 border-gray-700"
+            }`}
+          >
+            {i + 1}
+          </button>
+        ))}
+        <button onClick={() => goToPage(currentPage + 1)}>{">"}</button>
       </div>
     );
   };
@@ -167,28 +165,25 @@ export default function Home() {
       <div className="container mx-auto px-4">
         {/* Баннер */}
         <div className="relative">
-          <img
-            src={background}
-            className="w-full object-cover opacity-80"
-            alt=""
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f16] to-transparent" />
+          <img src={background} className="w-full object-cover opacity-80" />
+          <div className="absolute inset-0 bg-linear-to-t from-[#0b0f16] to-transparent" />
           <div className="absolute bottom-10 left-10">
-            <h1 className="text-4xl font-bold text-white">888 SHOP</h1>
-            <p className="text-gray-300 mt-2">
-              Проверенные игровые аккаунты с гарантией
-            </p>
+            <h1 className="text-4xl font-bold">888 SHOP</h1>
+            <p className="text-gray-300 mt-2">Проверенные игровые аккаунты</p>
           </div>
         </div>
 
-        {/* Уведомление */}
         <div className="bg-[#141a25] border border-gray-700 rounded-2xl p-4 my-6 text-sm text-gray-300 shadow-md">
-          ⚠ Все аккаунты проверяются вручную. Возврат средств при проблемах.
+          {" "}
+          ⚠{" "}
+          <a href="https://discord.gg/CDGEn6ERNb">
+            Наш <span className="underline">DISCORD</span> Сервер
+          </a>{" "}
         </div>
 
         {/* Фильтры */}
-        <div className="bg-[#141a25] p-6 rounded-2xl mb-8 border border-gray-700 shadow-md">
-          <h2 className="text-lg mb-3 font-semibold text-white">Фильтры</h2>
+        <div className="bg-[#141a25] p-6 rounded-2xl my-8 border border-gray-700">
+          <h2 className="text-lg mb-3 font-semibold">Фильтры</h2>
 
           <TagsFilter
             selectedTags={selectedTags}
@@ -203,10 +198,6 @@ export default function Home() {
               setMinPrice,
               maxPrice,
               setMaxPrice,
-              rarity,
-              setRarity,
-              weaponType,
-              setWeaponType,
               sort,
               setSort,
               onReset: resetFilters,
@@ -215,8 +206,13 @@ export default function Home() {
           />
         </div>
 
-        {/* Сетка товаров */}
-        <AccountList accounts={currentItems} />
+        {filteredAccounts.length === 0 ? (
+          <div className="text-center text-gray-400 text-lg my-10">
+            Товары не найдены 😕
+          </div>
+        ) : (
+          <AccountList accounts={currentItems} />
+        )}
 
         {/* Пагинация */}
         {renderPagination()}

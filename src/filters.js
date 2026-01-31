@@ -17,7 +17,7 @@ export const FILTER_GROUPS = {
         "Beryl M762 Gear Head",
         "Beryl M762 Darkest Depths",
         "ACE32 Demon's Touch",
-        "ACE32 Demon Hunter"
+        "ACE32 Demon Hunter",
       ],
       DMR: [
         "SKS Chrono Cannon",
@@ -29,7 +29,7 @@ export const FILTER_GROUPS = {
         "MK12 Hocus Focus",
         "MK12 Cyber Threat",
         "MK12 Bunny Patrol",
-        "Dragunov Rest in Pink"
+        "Dragunov Rest in Pink",
       ],
       SR: [
         "Kar98k Midnight Menace",
@@ -37,25 +37,13 @@ export const FILTER_GROUPS = {
         "M24 Sun Wukong",
         "M24 Final Serenade",
         "M24 Over the Rainbow",
-        "AWM Faded Ghost"
+        "AWM Faded Ghost",
       ],
-      SMG: [
-        "MP5K Winter Eclipse",
-        "MP5K ZERO-G"
-      ],
-      LMG: [
-        "M249 Cerberus"
-      ],
-      SHOTGUN: [
-        "S1897 Sun Scorched",
-        "DBS Atlantis"
-      ],
-      Melee: [
-        "Pan Siren",
-        "Pan Tang Sanzang",
-        "Pan White Tiger"
-      ]
-    }
+      SMG: ["MP5K Winter Eclipse", "MP5K ZERO-G"],
+      LMG: ["M249 Cerberus"],
+      SHOTGUN: ["S1897 Sun Scorched", "DBS Atlantis"],
+      Melee: ["Pan Siren", "Pan Tang Sanzang", "Pan White Tiger"],
+    },
   },
 
   chroma: {
@@ -65,9 +53,48 @@ export const FILTER_GROUPS = {
         "M416 No Signal (Yellow Black)",
         "M416 No Signal (Purple Charcoal)",
         "M416 Zhu Bajie (Teal Orange)",
-        "M416 Zhu Bajie (Magenta Peach)"
-      ]
-    }
+        "M416 Zhu Bajie (Magenta Peach)",
+        "M416 Trick-or-treat (Green Navy)",
+        "AUG Neon Dream (Magenta)",
+        "AUG Minotaur (Gray Tan)",
+        "AUG Bumper Blaster (Purple Pink)",
+        "AUG G-DRAGON (Red)",
+        "AKM Santa's Helper (Red Teal)",
+        "Beryl M762 Azure Dragon (Teal Gold)",
+        "Beryl M762 Medusa (Gold Charcoal)",
+        "Beryl M762 Medusa (Gray Purple)",
+        "Beryl M762 Gear Head (Gray)",
+        "Beryl M762 Darkest Depths (Brown Mint)",
+        "ACE32 Demon's Touch (Yellow Teal)",
+        "ACE32 Demon Hunter (Midnight Black)",
+      ],
+      DMR: [
+        "SKS Chrono Cannon (Blue Gold)",
+        "Mini14 Sha Wujing (Silver)",
+        "SLR Buzzkill (Black Gold)",
+        "SLR Deadly Dollhouse (Blue Orange)",
+        "MK12 Hocus Focus (Pink Yellow)",
+        "MK12 Cyber Threat (Khaki Burgundy)",
+        "MK12 Bunny Patrol (Purple)",
+        "Dragunov Rest in Pink (Teal Pink)",
+      ],
+      SR: [
+        "Kar98k Midnight Menace (Purple Black)",
+        "Kar98k Tiger Hunter (Khaki Crimson)",
+        "M24 Sun Wukong (Crimson Gold)",
+        "M24 Final Serenade (Blue Black)",
+        "M24 Over the Rainbow (Blue Black)",
+        "AWM Faded Ghost (Mocha Beige)",
+      ],
+      SMG: [
+        "MP5K Winter Eclipse (Red Purple)",
+        "MP5K ZERO-G (Crimson Navy)",
+        "MP5K ZERO-G (Lime Blue)",
+      ],
+      LMG: ["M249 Cerberus (Crimson Lime)"],
+      SHOTGUN: ["S1897 Sun Scorched (Yellow Purple)"],
+      Melee: ["Pan Siren (Pink)", "Pan Tang Sanzang (Teal)", "Pan White Tiger"],
+    },
   },
 
   gloves: {
@@ -83,8 +110,8 @@ export const FILTER_GROUPS = {
       "BreaK",
       "Hambinooo",
       "Heybox",
-      "Duncan Handwraps"
-    ]
+      "Duncan Handwraps",
+    ],
   },
 
   hair: {
@@ -94,16 +121,18 @@ export const FILTER_GROUPS = {
       "The Joker",
       "NieR:Automata 9S",
       "NieR:Automata 2B",
+      "Nier's Hairstyle",
       "LISA's BLACKPINK",
       "JISOO's BLACKPINK",
       "ROSÉ's BLACKPINK",
-      "JENNIE's BLACKPINK"
-    ]
+      "JENNIE's BLACKPINK",
+      "Nier's Hairstyle"
+    ],
   },
 
   characters: {
     label: "Персонажи",
-    list: ["Dorian", "Hanna"]
+    list: ["Dorian", "Hanna"],
   },
 
   makeup: {
@@ -114,8 +143,8 @@ export const FILTER_GROUPS = {
       "The Joker Makeup",
       "Midnight Ritual",
       "Marigold Mayhem",
-      "Deadman's Rhythm"
-    ]
+      "Deadman's Rhythm",
+    ],
   },
 
   cars: {
@@ -131,8 +160,8 @@ export const FILTER_GROUPS = {
       "Vantage Roadster",
       "DBX707",
       "McLaren GT",
-      "Panigale V4 S"
-    ]
+      "Panigale V4 S",
+    ],
   },
 
   smoke: {
@@ -147,15 +176,17 @@ export const FILTER_GROUPS = {
       "Teal",
       "Azure",
       "Purple",
-      "Orange"
-    ]
+      "Orange",
+    ],
   },
+
   survival: {
     label: "Survival Level",
-    list: ["1 TIER", "2 TIER", "3 TIER", "4 TIER", "5 TIER"]
+    list: ["1 TIER", "2 TIER", "3 TIER", "4 TIER", "5 TIER"],
   },
+
   pubgPlus: {
     label: "PUBG PLUS",
-    list: ["YES", "NO"]
-  }
+    list: ["YES", "NO"],
+  },
 };

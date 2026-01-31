@@ -11,7 +11,7 @@ export default function TagsFilter({ selectedTags = [], setSelectedTags }) {
   };
 
   const groups = Object.values(FILTER_GROUPS);
-  const visibleGroups = showAll ? groups : groups.slice(0, 1);
+  const visibleGroups = showAll ? groups : groups.slice(0, 0.5);
 
   return (
     <div className="space-y-6 mb-6">
