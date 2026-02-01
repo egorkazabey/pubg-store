@@ -3,7 +3,28 @@ import { useParams, useNavigate } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import cardImg from "../assets/card-img.png";
-import qrtg from "../assets/tg-qr.jpg";
+
+import BuyModal from "../components/ui/modals/buyModal";
+
+const isYouTubeUrl = (url) =>
+  typeof url === "string" &&
+  (url.includes("youtube.com") || url.includes("youtu.be"));
+
+const getYouTubeEmbedUrl = (url) => {
+  if (!url) return null;
+
+  if (url.includes("youtu.be")) {
+    const id = url.split("youtu.be/")[1].split("?")[0];
+    return `https://www.youtube.com/embed/${id}`;
+  }
+
+  if (url.includes("watch?v=")) {
+    const id = new URL(url).searchParams.get("v");
+    return `https://www.youtube.com/embed/${id}`;
+  }
+
+  return null;
+};
 
 const AccountPage = () => {
   const { id } = useParams();
@@ -11,10 +32,8 @@ const AccountPage = () => {
   const [account, setAccount] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // 🔍 просмотр увеличенного фото
   const [previewImage, setPreviewImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const loadAccount = async () => {
@@ -40,7 +59,6 @@ const AccountPage = () => {
 
   return (
     <div className="min-h-screen bg-[#0b0f16] text-white">
-      {/* Назад */}
       <div className="max-w-6xl mx-auto px-6 pt-4">
         <button
           onClick={() => navigate(-1)}
@@ -50,12 +68,9 @@ const AccountPage = () => {
         </button>
       </div>
 
-      {/* Основной блок */}
       <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
-        {/* Галерея */}
         <div className="space-y-4">
-          {/* Главное фото */}
-          <div className="w-full h-105 flex items-center justify-center   rounded overflow-hidden">
+          <div className="w-full h-105 flex items-center justify-center rounded overflow-hidden">
             <img
               src={images[activeImage]}
               className="w-full h-full object-contain cursor-zoom-in"
@@ -64,7 +79,6 @@ const AccountPage = () => {
             />
           </div>
 
-          {/* Превью */}
           <div className="flex gap-2 overflow-x-auto pb-2">
             {images.map((img, idx) => (
               <div
@@ -90,7 +104,6 @@ const AccountPage = () => {
           </div>
         </div>
 
-        {/* Инфо */}
         <div className="space-y-4">
           <h1 className="text-2xl font-semibold">{account.title}</h1>
           <div className="text-3xl font-bold">₽ {account.price}</div>
@@ -110,76 +123,49 @@ const AccountPage = () => {
         </div>
       </div>
 
-      {/* Доп фото */}
       {account.extraImage && (
-        <div className="w-full flex justify-center mt-6">
-          <img
-            src={account.extraImage}
-            className="w-full max-w-4xl object-contain"
-            alt="Дополнительное фото"
-          />
-        </div>
-      )}
-
-      {/* Модалка покупки */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
-          onClick={() => setIsModalOpen(false)}
-        >
-          <div
-            className="bg-[#141a25] rounded-2xl p-6 w-full max-w-sm relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="absolute top-3 right-3 text-gray-400 text-2xl"
-              onClick={() => setIsModalOpen(false)}
-            >
-              &times;
-            </button>
-
-            <h2 className="text-xl font-semibold mb-4 text-center">
-              Связаться с продавцом
-            </h2>
-
-            <p className="text-center my-2 underline">
-              <a href="https://discord.gg/CDGEn6ERNb">Discord</a>
-            </p>
-            <p className="text-green-500 text-center mb-2">Telegram: @caseapiaa</p>
-            <div className="flex justify-center">
-              <img src={qrtg} className="w-48 h-48 rounded-3xl" />
+        <div className="w-full flex justify-center mt-10 px-4">
+          {isYouTubeUrl(account.extraImage) ? (
+            <div className="w-full max-w-4xl aspect-video rounded-xl overflow-hidden border border-gray-700">
+              <iframe
+                src={getYouTubeEmbedUrl(account.extraImage)}
+                title="YouTube video"
+                className="w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
-          </div>
+          ) : (
+            <img
+              src={account.extraImage}
+              className="w-full max-w-4xl object-contain rounded-xl"
+              alt="Дополнительный контент"
+            />
+          )}
         </div>
       )}
 
-      {/* 🔍 Увеличенное фото */}
+      {isModalOpen && <BuyModal setIsModalOpen={setIsModalOpen}/>}
+
       {previewImage && (
         <div
-          className="fixed inset-0 z-60 flex items-center justify-center bg-black bg-opacity-80
-               animate-fadeIn"
+          className="fixed inset-0 z-60 flex items-center justify-center bg-black bg-opacity-80"
           onClick={() => setPreviewImage(null)}
         >
-          <div
-            className="relative animate-scaleIn"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Крестик */}
+          <div className="relative" onClick={(e) => e.stopPropagation()}>
             <button
-              className="cursor-pointer absolute -top-4 -right-4 bg-black bg-opacity-70
-                   text-white w-10 h-10 rounded-full
-                   flex items-center justify-center
-                   text-2xl hover:bg-opacity-90 transition"
+              className="absolute -top-4 -right-4 bg-black bg-opacity-70
+              text-white w-10 h-10 rounded-full flex items-center justify-center
+              text-2xl"
               onClick={() => setPreviewImage(null)}
             >
               &times;
             </button>
 
-            {/* Картинка */}
             <img
               src={previewImage}
-              className="max-w-[90vw] max-h-[90vh] object-contain
-                   rounded-xl shadow-2xl"
+              className="max-w-[90vw] max-h-[90vh] object-contain rounded-xl"
               alt="Увеличенное фото"
             />
           </div>

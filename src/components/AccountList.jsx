@@ -6,7 +6,7 @@ const AccountList = ({ accounts }) => {
     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
       {accounts.map((acc) => (
         <Link key={acc.id} to={`/account/${acc.id}`}>
-          <div className="bg-[#141a25] border border-gray-700 rounded-xl hover:scale-[1.03] transition overflow-hidden flex flex-col h-115 shadow-lg">
+          <div className="bg-[#141a25] border border-gray-700 rounded-xl hover:scale-[1.03] transition overflow-hidden flex flex-col h-100 shadow-lg">
 
             {/* Изображение */}
             <div className="h-40 w-full shrink-0 relative">

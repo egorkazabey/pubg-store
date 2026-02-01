@@ -46,6 +46,42 @@ export const FILTER_GROUPS = {
     },
   },
 
+  oldSkins: {
+    label: "OLD SKINS",
+    weapons: {
+      AR: [
+        "M416 NeoticaCH's",
+        "M416 CigaretteSTV",
+        "M416 Wakgood",
+        "M416 Speed & Momentum",
+        "M416 Full Autumn",
+        "AKM Shroud",
+        "AKM XingHun's",
+        "АКМ Ashek",
+        "Beryl M762 Edberg",
+        "Beryl M762 chocoTaco",
+        "Beryl M762 Toxic",
+      ],
+
+      DMR: [
+        "SKS Pirate KIM",
+        "SLR BreaK",
+        "SLR fuffenz",
+        "SLR SkipNhO",
+        "SLR Mazarin1k",
+        "SLR Mithrain",
+      ],
+
+      SR: [
+        "Kar98k Shroud",
+        "Kar98k Speed & Momentum",
+        "Kar98k Lumi",
+        "М24 JennaJulien",
+        "M24 SPYGEA",
+      ],
+    },
+  },
+
   chroma: {
     label: "Хрома",
     weapons: {
@@ -93,7 +129,7 @@ export const FILTER_GROUPS = {
       ],
       LMG: ["M249 Cerberus (Crimson Lime)"],
       SHOTGUN: ["S1897 Sun Scorched (Yellow Purple)"],
-      Melee: ["Pan Siren (Pink)", "Pan Tang Sanzang (Teal)", "Pan White Tiger"],
+      Melee: ["Pan Siren (Pink)", "Pan Tang Sanzang (Teal)", "Pan White Tiger (Chroma)"],
     },
   },
 
@@ -126,7 +162,7 @@ export const FILTER_GROUPS = {
       "JISOO's BLACKPINK",
       "ROSÉ's BLACKPINK",
       "JENNIE's BLACKPINK",
-      "Nier's Hairstyle"
+      "Nier's Hairstyle",
     ],
   },
 

@@ -7,8 +7,9 @@ import FiltersBar from "../components/FiltersBar";
 import TagsFilter from "../components/TagsFilter";
 import AccountList from "../components/AccountList";
 import background from "../assets/background1.jpg";
-
+import Pagination from "../components/ui/pagination/pagination";
 export default function Home() {
+  const [currentPage, setCurrentPage] = useState(1);
   const [accounts, setAccounts] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -31,7 +32,6 @@ export default function Home() {
   });
 
   // ===== пагинация =====
-  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
 
   // ===== загрузка данных =====
@@ -124,41 +124,14 @@ export default function Home() {
   }, [accounts, activeFilters]);
 
   // ===== пагинация =====
+
   const totalPages = Math.ceil(filteredAccounts.length / itemsPerPage);
   const currentItems = filteredAccounts.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
 
-  const goToPage = (page) => {
-    if (page < 1) page = 1;
-    if (page > totalPages) page = totalPages;
-    setCurrentPage(page);
-  };
 
-  const renderPagination = () => {
-    if (totalPages <= 1) return null;
-
-    return (
-      <div className="flex flex-wrap gap-2 justify-center mt-6">
-        <button onClick={() => goToPage(currentPage - 1)}>{"<"}</button>
-        {[...Array(totalPages)].map((_, i) => (
-          <button
-            key={i}
-            onClick={() => goToPage(i + 1)}
-            className={`px-3 py-1 rounded border ${
-              currentPage === i + 1
-                ? "bg-blue-600 text-white border-blue-600"
-                : "bg-[#141a25] text-gray-300 border-gray-700"
-            }`}
-          >
-            {i + 1}
-          </button>
-        ))}
-        <button onClick={() => goToPage(currentPage + 1)}>{">"}</button>
-      </div>
-    );
-  };
 
   return (
     <div className="min-h-screen bg-[#0b0f16] text-white">
@@ -174,8 +147,13 @@ export default function Home() {
         </div>
 
         <div className="bg-[#141a25] border border-gray-700 rounded-2xl p-4 my-6 text-sm text-gray-300 shadow-md">
-          {" "}
-          ⚠{" "}
+          <p>
+            Если вы не нашли аккаунт который нужен именно вам напишите мне в
+            личные сообщения discord/telegram
+          </p>
+        </div>
+
+        <div className="bg-[#141a25] border border-gray-700 rounded-2xl p-4 my-6 text-sm text-gray-300 shadow-md">
           <a href="https://discord.gg/CDGEn6ERNb">
             Наш <span className="underline">DISCORD</span> Сервер
           </a>{" "}
@@ -214,8 +192,7 @@ export default function Home() {
           <AccountList accounts={currentItems} />
         )}
 
-        {/* Пагинация */}
-        {renderPagination()}
+        <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} currentPage={currentPage}/>
       </div>
     </div>
   );
