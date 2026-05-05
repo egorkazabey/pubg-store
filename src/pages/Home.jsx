@@ -6,18 +6,19 @@ import { useSearchParams } from "react-router-dom";
 import FiltersBar from "../components/FiltersBar";
 import TagsFilter from "../components/TagsFilter";
 import AccountList from "../components/AccountList";
-import background from "../assets/background1.jpg";
+import background from "../assets/szhato.gif";
 import Pagination from "../components/ui/pagination/pagination";
+
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [accounts, setAccounts] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // ===== состояния инпутов (берём из URL) =====
+  // ===== состояния инпутов =====
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") || "");
   const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") || "");
-  const [sort, setSort] = useState(searchParams.get("sort") || "");
+  const [sort, setSort] = useState(searchParams.get("sort") || "new");
   const [selectedTags, setSelectedTags] = useState(
     searchParams.get("tags")?.split(",").filter(Boolean) || [],
   );
@@ -52,7 +53,8 @@ export default function Home() {
       sort,
       selectedTags,
     });
-  }, []); // eslint-disable-line
+    // eslint-disable-next-line
+  }, []);
 
   // ===== сброс страницы при изменении фильтров =====
   useEffect(() => {
@@ -85,7 +87,7 @@ export default function Home() {
     setSearch("");
     setMinPrice("");
     setMaxPrice("");
-    setSort("");
+    setSort("new");
     setSelectedTags([]);
     setSearchParams({});
 
@@ -93,23 +95,22 @@ export default function Home() {
       search: "",
       minPrice: "",
       maxPrice: "",
-      sort: "",
+      sort: "new",
       selectedTags: [],
     });
   };
 
-  // ===== фильтрация =====
+  // ===== фильтрация + сортировка =====
   const filteredAccounts = useMemo(() => {
     let data = [...accounts];
     const f = activeFilters;
 
     if (f.search)
       data = data.filter((a) =>
-        a.title.toLowerCase().includes(f.search.toLowerCase()),
+        a.title?.toLowerCase().includes(f.search.toLowerCase()),
       );
 
     if (f.minPrice) data = data.filter((a) => a.price >= Number(f.minPrice));
-
     if (f.maxPrice) data = data.filter((a) => a.price <= Number(f.maxPrice));
 
     if (f.selectedTags.length)
@@ -117,51 +118,59 @@ export default function Home() {
         f.selectedTags.every((tag) => a.tags?.includes(tag)),
       );
 
-    if (f.sort === "priceAsc") data.sort((a, b) => a.price - b.price);
-    if (f.sort === "priceDesc") data.sort((a, b) => b.price - a.price);
+    if (f.sort === "priceAsc") {
+      data.sort((a, b) => a.price - b.price);
+    }
+
+    if (f.sort === "priceDesc") {
+      data.sort((a, b) => b.price - a.price);
+    }
+
+    if (f.sort === "new") {
+      data.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds);
+    }
 
     return data;
   }, [accounts, activeFilters]);
 
   // ===== пагинация =====
-
   const totalPages = Math.ceil(filteredAccounts.length / itemsPerPage);
   const currentItems = filteredAccounts.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
 
-
-
   return (
-    <div className="min-h-screen bg-[#0b0f16] text-white">
-      <div className="container mx-auto px-4">
-        {/* Баннер */}
-        <div className="relative">
-          <img src={background} className="w-full object-cover opacity-80" />
-          <div className="absolute inset-0 bg-linear-to-t from-[#0b0f16] to-transparent" />
-          <div className="absolute bottom-10 left-10">
-            <h1 className="text-4xl font-bold">888 SHOP</h1>
-            <p className="text-gray-300 mt-2">Проверенные игровые аккаунты</p>
-          </div>
+    <div className="min-h-screen bg-black text-white">
+      <div className="relative">
+        <img
+          src={background}
+          alt=""
+          className="w-full object-contain h-auto sm:object-cover sm:h-200 opacity-80"
+        />
+        <div className="absolute inset-0 bg-linear-to-t from-black to-transparent" />
+        <div className="absolute bottom-10 left-10">
+          <h1 className="text-4xl font-bold text-white">888 SHOP</h1>
+          <p className="text-gray-300 mt-2">Проверенные игровые аккаунты</p>
         </div>
+      </div>
 
-        <div className="bg-[#141a25] border border-gray-700 rounded-2xl p-4 my-6 text-sm text-gray-300 shadow-md">
+      <div className="container max-w-387.5 mx-auto px-4">
+        <div className="bg-[#101217] border border-gray-800 rounded-2xl p-4 my-6 text-sm text-gray-300 shadow-md">
           <p>
-            Если вы не нашли аккаунт который нужен именно вам напишите мне в
+            Если вы не нашли аккаунт который нужен именно вам — напишите мне в
             личные сообщения discord/telegram
           </p>
         </div>
 
-        <div className="bg-[#141a25] border border-gray-700 rounded-2xl p-4 my-6 text-sm text-gray-300 shadow-md">
+        <div className="bg-[#101217] border border-gray-800 rounded-2xl p-4 my-6 text-sm text-gray-300 shadow-md">
           <a href="https://discord.gg/CDGEn6ERNb">
             Наш <span className="underline">DISCORD</span> Сервер
-          </a>{" "}
+          </a>
         </div>
 
-        {/* Фильтры */}
-        <div className="bg-[#141a25] p-6 rounded-2xl my-8 border border-gray-700">
-          <h2 className="text-lg mb-3 font-semibold">Фильтры</h2>
+        <div className="bg-[#101217] p-6 rounded-2xl my-8 border border-gray-800">
+          <h2 className="text-lg mb-3 font-semibold text-white">Фильтры</h2>
 
           <TagsFilter
             selectedTags={selectedTags}
@@ -169,18 +178,16 @@ export default function Home() {
           />
 
           <FiltersBar
-            {...{
-              search,
-              setSearch,
-              minPrice,
-              setMinPrice,
-              maxPrice,
-              setMaxPrice,
-              sort,
-              setSort,
-              onReset: resetFilters,
-              onSearch: handleApplyFilters,
-            }}
+            search={search}
+            setSearch={setSearch}
+            minPrice={minPrice}
+            setMinPrice={setMinPrice}
+            maxPrice={maxPrice}
+            setMaxPrice={setMaxPrice}
+            sort={sort}
+            setSort={setSort}
+            onReset={resetFilters}
+            onSearch={handleApplyFilters}
           />
         </div>
 
@@ -192,7 +199,11 @@ export default function Home() {
           <AccountList accounts={currentItems} />
         )}
 
-        <Pagination totalPages={totalPages} setCurrentPage={setCurrentPage} currentPage={currentPage}/>
+        <Pagination
+          totalPages={totalPages}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
       </div>
     </div>
   );

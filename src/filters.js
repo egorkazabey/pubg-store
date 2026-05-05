@@ -62,7 +62,6 @@ export const FILTER_GROUPS = {
         "Beryl M762 chocoTaco",
         "Beryl M762 Toxic",
       ],
-
       DMR: [
         "SKS Pirate KIM",
         "SLR BreaK",
@@ -71,7 +70,6 @@ export const FILTER_GROUPS = {
         "SLR Mazarin1k",
         "SLR Mithrain",
       ],
-
       SR: [
         "Kar98k Shroud",
         "Kar98k Speed & Momentum",
@@ -129,7 +127,59 @@ export const FILTER_GROUPS = {
       ],
       LMG: ["M249 Cerberus (Crimson Lime)"],
       SHOTGUN: ["S1897 Sun Scorched (Yellow Purple)"],
-      Melee: ["Pan Siren (Pink)", "Pan Tang Sanzang (Teal)", "Pan White Tiger (Chroma)"],
+      Melee: [
+        "Pan Siren (Pink)",
+        "Pan Tang Sanzang (Teal)",
+        "Pan White Tiger (Chroma)",
+      ],
+    },
+  },
+
+  hoodies: {
+    label: "Hoodie",
+    weapons: {
+      STREAMERS: [
+        "XINGHUN",
+        "XDD",
+        "HAMBINOOO",
+        "BREAK",
+        "CHENGZI",
+        "DANUCD",
+        "MAZARIN1K",
+        "MANSON",
+        "LUMI",
+        "SKIPNHO",
+        "PAVA",
+        "SACRIEL",
+      ],
+      OTHER: [
+        "XIONGDI",
+        "RVAN THE LION",
+        "JIJING",
+        "PKL",
+        "RINGSIDE",
+        "FACEIT GLOBAL SUMMIT",
+      ],
+      BLACK: [
+        "PGI 2018 OMG",
+        "PGI 2018 GENG",
+        "PGI 2018 AHQ E-SPORTS CLUB",
+        "PGI 2018 REFUND GAMING",
+        "PGI 2018 CREST GAMING XANADU",
+      ],
+      WHITE: [
+        "PGI 2018 TEAM LIQUID",
+        "PGI 2018 GENG",
+        "PGI 2018 GHOST GAMING",
+        "PGI 2018 CREST GAMING WINDFALL",
+      ],
+      PINK: ["PGI 2018 SAVAGE ESPORTS"],
+      BLUE: ["PGI 2018 AVANGAR", "PGI 2018 TEAM GATES"],
+      RED: [
+        "PGI 2018 NATUS VINCERE",
+        "PGI 2018 FOUR ANGRY MEN",
+        "PGI 2018 HONEY BADGER NATION",
+      ],
     },
   },
 
@@ -162,7 +212,6 @@ export const FILTER_GROUPS = {
       "JISOO's BLACKPINK",
       "ROSÉ's BLACKPINK",
       "JENNIE's BLACKPINK",
-      "Nier's Hairstyle",
     ],
   },
 
